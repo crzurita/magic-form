@@ -91,6 +91,7 @@
                 var btn = document.createElement('button');
                 if (act){
                   btn.type="submit";
+                  plantilla.querySelector('form').setAttribute('method', 'POST')
                 }
                 btn.innerHTML = atributos[i].nodeValue;
                 plantilla.querySelector('form').appendChild(btn);
