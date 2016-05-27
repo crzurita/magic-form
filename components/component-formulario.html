@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WebComponent: Formulario</title>
+</head>
+<body>
+  <template>
+
+    <style>
+      body{
+        margin: 0;
+      }
+      form{
+        padding: 20px;
+        position: relative;
+      }
+      ::-webkit-input-placeholder{
+        color: black;
+      }
+      input, textarea{
+        display: inline-block;
+        width: 100%;
+        margin: 7px 0px;
+        resize: none;
+        padding-left: 8px;
+        border-radius: 3px;
+        border: 2px solid black;
+        box-sizing: border-box;
+        font-family: verdana;
+      }
+      input{
+        height: 36px;
+      }
+      textarea{
+        height: 100px;
+      }
+      button{
+        border: none;
+        background-color: black;
+        color: white;
+        padding: 10px;
+        float: right;
+      }
+      .file{
+        border: none;
+      }
+
+    </style>
+
+  </template>
+
+  <script>
+    cz = (function(){
+      var formulario = Object.create(HTMLElement.prototype)
+      var estilos = document.currentScript.ownerDocument.querySelector('template').content;
+      formulario.createdCallback = function(){
+        var f = document.createElement('form');
+        estilos.appendChild(f)
+        var plantilla = document.importNode(estilos, true);
+        var atributos = this.attributes;
+        var i = 0;
+        var act = false;
+        while (i<atributos.length){
+          if (atributos[i].nodeName == 'action'){
+            act = true
+            break;
+          }
+          i++;
+        }
+        i = 0;
+        while (i < atributos.length){
+          if (atributos[i].nodeName.search('data') != -1){
+            var attrNom = atributos[i].nodeName;
+            var attrVal = JSON.parse('[' + atributos[i].nodeValue + ']');
+            if (attrVal.length>1){
+              attrVal.forEach(function(nombre){
+              elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
+              elem.setAttribute('placeholder', nombre);
+              if (act){elem.setAttribute('name', nombre.toLowerCase())}else{elem.setAttribute('ng-model', nombre.toLowerCase())}
+              plantilla.querySelector('form').appendChild(elem);
+              })
+            }else{
+              elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
+              elem.setAttribute('placeholder', attrVal[0]);
+              if (act){elem.setAttribute('name', attrVal[0].toLowerCase())}else{elem.setAttribute('ng-model', attrVal[0].toLowerCase())}
+              plantilla.querySelector('form').appendChild(elem);
+            }
+          }else{
+            if (atributos[i].nodeName == 'btn'){
+                var btn = document.createElement('button');
+                if (act){
+                  btn.type="submit";
+                }
+                btn.innerHTML = atributos[i].nodeValue;
+                plantilla.querySelector('form').appendChild(btn);
+            }else if(atributos[i].nodeName == "file"){
+              elem = document.createElement('input');
+              elem.setAttribute('type','file');
+              elem.setAttribute('class', 'file');
+              elem.setAttribute('name', 'file');
+              plantilla.querySelector('form').appendChild(elem);
+            }else{
+              plantilla.querySelector('form').setAttribute(atributos[i].nodeName, atributos[i].nodeValue)
+            }
+          }
+        i++;
+        }
+        this.createShadowRoot().appendChild(plantilla);
+      }
+      document.registerElement('cz-form', {
+        prototype: formulario
+      })
+    })()
+  </script>
+</body>
+</html>
