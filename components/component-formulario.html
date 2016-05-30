@@ -52,6 +52,40 @@
   </template>
 
   <script>
+
+    function typear(tipo){
+      var tipos = [
+        ['mail', '@', 'email'],
+        ['telefono', 'phone', 'celular', 'cellphone', 'tel'],
+        ['contraseña', 'contrasena', 'contrasenia', 'clave', 'pass', 'password'],
+        ['numero', 'cantidad', 'cant', 'quantity', 'concurrentes', 'people', 'personas', 'number'],
+        ['fecha', 'dia', 'day', 'date']
+      ]
+      var reg = new RegExp('^'+tipo+'\b')
+      var i = 0;
+      var band = 0;
+      while (i < tipos.length){
+        var j = 0;
+        while (j < tipos[i].length){
+          if (tipos[i][j].search(tipo) != -1){
+            if (tipos[i][j] == tipo){
+              return tipos[i][tipos[i].length-1]
+              band = 1;
+              break;
+            }
+          }
+          j++
+        }
+        if (band == 1){
+          break;
+        }
+        if (i == tipos.length-1 && band == 0){
+          return 'text'
+        }
+        i++
+      }
+    }
+
     function parsear(palabra){
       var vocales = ['á', 'é', 'í', 'ó', 'ú']
       var cambio = ['a', 'e', 'i', 'o', 'u']
@@ -91,12 +125,14 @@
               attrVal.forEach(function(nombre){
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', nombre);
+              elem.setAttribute('type', typear(parsear(nombre.toLowerCase())))
               if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', nombre.toLowerCase())}
               plantilla.querySelector('form').appendChild(elem);
               })
             }else{
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', attrVal[0]);
+              elem.setAttribute('type', typear(parsear(attrVal[0].toLowerCase())))
               if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', attrVal[0].toLowerCase())}
               plantilla.querySelector('form').appendChild(elem);
             }
