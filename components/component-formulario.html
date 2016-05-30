@@ -97,15 +97,16 @@
         palabra2 = palabra2.replace(palabra2[0], palabra[0])
         i++;
       }
-      return palabra2;
+      return palabra2.replace(/\s.*/, "");
     }
     (function(){
       var formulario = Object.create(HTMLElement.prototype)
       var estilos = document.currentScript.ownerDocument.querySelector('template').content;
+      var plantilla = "";
       formulario.createdCallback = function(){
         var f = document.createElement('form');
         estilos.appendChild(f)
-        var plantilla = document.importNode(estilos, true);
+        plantilla = document.importNode(estilos, true);
         var atributos = this.attributes;
         var i = 0;
         var act = false;
@@ -126,14 +127,24 @@
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', nombre);
               elem.setAttribute('type', typear(parsear(nombre.toLowerCase())))
-              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', nombre.toLowerCase())}
+              if(elem.getAttribute('type') == 'date'){
+                var tmpFecha = elem;
+                elem.setAttribute('type', 'text')
+                elem.addEventListener('focus', function(){
+                  tmpFecha.setAttribute('type', 'date')
+                  this.removeEventListener('focus', function(){
+                    tmpFecha.setAttribute('type', 'date')
+                  })
+                })
+              }
+              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', parsear(nombre.toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
               })
             }else{
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', attrVal[0]);
               elem.setAttribute('type', typear(parsear(attrVal[0].toLowerCase())))
-              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', attrVal[0].toLowerCase())}
+              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', parsear(attrVal[0].toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
             }
           }else{
