@@ -130,11 +130,10 @@
               if(elem.getAttribute('type') == 'date'){
                 var tmpFecha = elem;
                 elem.setAttribute('type', 'text')
-                elem.addEventListener('focus', function(){
-                  tmpFecha.setAttribute('type', 'date')
-                  this.removeEventListener('focus', function(){
-                    tmpFecha.setAttribute('type', 'date')
-                  })
+
+                elem.addEventListener('focus', function asdf(){
+                  tmpFecha.setAttribute('type', 'date');
+                  this.removeEventListener('focus', asdf)
                 })
               }
               if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', parsear(nombre.toLowerCase()))}
@@ -162,13 +161,21 @@
               elem.setAttribute('class', 'file');
               elem.setAttribute('name', 'file');
               plantilla.querySelector('form').appendChild(elem);
+            }else if (atributos[i].nodeName == 'ang-app' || atributos[i].nodeName == 'ang-ctrl'){
+              if (act){
+                plantilla.querySelector('form').removeAttribute('ang-app');
+                plantilla.querySelector('form').removeAttribute('ang-ctrl');
+              }else{
+                plantilla.querySelector('form').setAttribute('ng-app', atributos[i].nodeValue);
+                plantilla.querySelector('form').setAttribute('ng-controller', atributos[i+1].nodeValue);
+              }
             }else{
               plantilla.querySelector('form').setAttribute(atributos[i].nodeName, atributos[i].nodeValue)
             }
           }
         i++;
         }
-        this.createShadowRoot().appendChild(plantilla);
+        act ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
       }
       document.registerElement('cz-form', {
         prototype: formulario
