@@ -41,6 +41,7 @@
         color: white;
         padding: 10px;
         float: right;
+        cursor: pointer;
       }
       .file{
         border: none;
@@ -51,7 +52,20 @@
   </template>
 
   <script>
-    cz = (function(){
+    function parsear(palabra){
+      var vocales = ['á', 'é', 'í', 'ó', 'ú']
+      var cambio = ['a', 'e', 'i', 'o', 'u']
+      var i = 0;
+      palabra2 = palabra;
+      while(i < palabra.length){
+        palabra2 = palabra2.toUpperCase().replace(vocales[i], cambio[i]);
+        palabra2 = palabra2.toLowerCase().replace(vocales[i], cambio[i]);
+        palabra2 = palabra2.replace(palabra2[0], palabra[0])
+        i++;
+      }
+      return palabra2;
+    }
+    (function(){
       var formulario = Object.create(HTMLElement.prototype)
       var estilos = document.currentScript.ownerDocument.querySelector('template').content;
       formulario.createdCallback = function(){
@@ -77,13 +91,13 @@
               attrVal.forEach(function(nombre){
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', nombre);
-              if (act){elem.setAttribute('name', nombre.toLowerCase())}else{elem.setAttribute('ng-model', nombre.toLowerCase())}
+              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', nombre.toLowerCase())}
               plantilla.querySelector('form').appendChild(elem);
               })
             }else{
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
               elem.setAttribute('placeholder', attrVal[0]);
-              if (act){elem.setAttribute('name', attrVal[0].toLowerCase())}else{elem.setAttribute('ng-model', attrVal[0].toLowerCase())}
+              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', attrVal[0].toLowerCase())}
               plantilla.querySelector('form').appendChild(elem);
             }
           }else{
