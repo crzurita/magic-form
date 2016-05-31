@@ -106,6 +106,7 @@
       var plantilla = "";
       var angApp = "";
       var rutaJs = "";
+      var act = false;
       formulario.createdCallback = function(){
         var f = document.createElement('form');
         estilos.appendChild(f)
@@ -114,7 +115,6 @@
         angApp = this.getAttribute('ang-app')
         rutaJs = this.getAttribute('rutaJs')
         var i = 0;
-        var act = false;
         var objeto = "";
         while (i<atributos.length){
           if (atributos[i].nodeName == 'action'){
@@ -205,17 +205,19 @@
       }
 
       formulario.attachedCallback = function(){
-        scri = document.createElement('script');
-        scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
-        document.body.appendChild(scri)
-        scri.addEventListener('load', cargarAng)
-        function cargarAng(){
-          var ruta = document.createElement('script');
-          ruta.src = rutaJs;
-          document.body.appendChild(ruta);
-          angular.element(document).ready(function() {
-            angular.bootstrap(document, [angApp]);
-          });
+        if (act == false){
+          scri = document.createElement('script');
+          scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
+          document.body.appendChild(scri)
+          scri.addEventListener('load', cargarAng)
+          function cargarAng(){
+            var ruta = document.createElement('script');
+            ruta.src = rutaJs;
+            document.body.appendChild(ruta);
+            angular.element(document).ready(function() {
+              angular.bootstrap(document, [angApp]);
+            });
+          }
         }
       }
 
