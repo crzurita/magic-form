@@ -7,35 +7,7 @@
 </head>
 <body>
 
-<cz-form data-input='"Nombre", "Fecha de Nacimiento", "Teléfono", "Cantidad"' ang-app="miApp" ang-ctrl="miCtrl" scope="datos" rutaJs="app.js" file btn="ENVIAR" ></cz-form>
-
-<script>
-
-    /*scri = document.createElement('script');
-    scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
-    document.body.appendChild(scri)
-    scri.addEventListener('load', cargarAng)
-    function cargarAng(){
-      angular
-        .module('cz-form', [])
-        .factory('fdatos', function(){
-          var datos: {}
-          return datos;
-        })
-        .controller('miCtrl', ['$scope', funcion])
-        function funcion($scope){
-          var scope = this;
-          scope.datos = {};
-          scope.enviar = function(){
-            for(prop in scope.datos){
-              alert(scope.datos[prop])
-            }
-          }
-          alert('Angular funciona con el form!!! :D')
-        }
-    }*/
-</script>
-
+<cz-form data-input='"Nombre", "Fecha de Nacimiento", "Teléfono", "Cantidad"' action="procesar.php" file btn="ENVIAR"></cz-form>
 
 </body>
 </html>
