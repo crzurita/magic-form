@@ -38,6 +38,14 @@ btn="NombreBoton"
 Para indicar el nombre de tu modulo y tu controlador que se va a encargar de hacer las llamadas HTTP puedes usar ```ang-app="tuApp" ang-ctrl="tuCtrl"``` Siempre debe ir primero ang-app y luego ang-ctrl
 =======
 
+6) Validaciones con Require
+=======
+Para validar con la api de html5 checkvalidity, solo se debe agregar una barra y una r (/r) al final de cada atributo en el input.
+```
+<c-form data-input='"Nombre/r", "Email/r", "Pais"' data-textarea='"Mensaje/r"'></cz-form>
+```
+Como resultado tendremos los inputs Nombre, Email y Mensaje como obgligatorios. Es decir que si o si deberemos llenar esos campos que son obligatorios.
+
 NOTA: Los unicos atributos que van con la forma ```data-input=' "" '``` son los que empiezan con ```data-*```, después todos los otros atributos se definen normalmente: Ej: ```name="nombreForm"```
 
 
