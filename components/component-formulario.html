@@ -99,20 +99,23 @@
       }
       return palabra2.replace(/\s.*/, "");
     }
-    function req(nombre){
 
-    }
     (function(){
       var formulario = Object.create(HTMLElement.prototype)
       var estilos = document.currentScript.ownerDocument.querySelector('template').content;
       var plantilla = "";
+      var angApp = "";
+      var rutaJs = "";
       formulario.createdCallback = function(){
         var f = document.createElement('form');
         estilos.appendChild(f)
         plantilla = document.importNode(estilos, true);
         var atributos = this.attributes;
+        angApp = this.getAttribute('ang-app')
+        rutaJs = this.getAttribute('rutaJs')
         var i = 0;
         var act = false;
+        var objeto = "";
         while (i<atributos.length){
           if (atributos[i].nodeName == 'action'){
             act = true
@@ -120,6 +123,15 @@
           }
           i++;
         }
+        i = 0
+        while (i<atributos.length){
+          if (atributos[i].nodeName == 'scope'){
+            objeto = atributos[i].nodeValue
+            break;
+          }
+          i++;
+        }
+
         i = 0;
         while (i < atributos.length){
           if (atributos[i].nodeName.search('data') != -1){
@@ -143,7 +155,7 @@
                   this.removeEventListener('focus', asdf)
                 })
               }
-              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', parsear(nombre.toLowerCase()))}
+              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(nombre.toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
               })
             }else{
@@ -154,7 +166,7 @@
               }
               elem.setAttribute('placeholder', attrVal[0]);
               elem.setAttribute('type', typear(parsear(attrVal[0].toLowerCase())))
-              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', parsear(attrVal[0].toLowerCase()))}
+              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(attrVal[0].toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
             }
           }else{
@@ -172,13 +184,15 @@
               elem.setAttribute('class', 'file');
               elem.setAttribute('name', 'file');
               plantilla.querySelector('form').appendChild(elem);
-            }else if (atributos[i].nodeName == 'ang-app'){
+            }else if (atributos[i].nodeName == 'ang-ctrl'){
               if (act){
                 plantilla.querySelector('form').removeAttribute('ang-app');
                 plantilla.querySelector('form').removeAttribute('ang-ctrl');
               }else{
-                plantilla.querySelector('form').setAttribute('ng-app', atributos[i].nodeValue);
-                plantilla.querySelector('form').setAttribute('ng-controller', atributos[i+1].nodeValue);
+                //plantilla.querySelector('form').setAttribute('ng-app', atributos[i].nodeValue);
+                plantilla.querySelector('form').setAttribute('ng-controller', atributos[i].nodeValue+" as scope");
+                plantilla.querySelector('form').setAttribute('ng-submit', 'scope.enviar()');
+                plantilla.a
               }
             }else{
               plantilla.querySelector('form').setAttribute(atributos[i].nodeName, atributos[i].nodeValue)
@@ -186,8 +200,25 @@
           }
         i++;
         }
+
         act ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
       }
+
+      formulario.attachedCallback = function(){
+        scri = document.createElement('script');
+        scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
+        document.body.appendChild(scri)
+        scri.addEventListener('load', cargarAng)
+        function cargarAng(){
+          var ruta = document.createElement('script');
+          ruta.src = rutaJs;
+          document.body.appendChild(ruta);
+          angular.element(document).ready(function() {
+            angular.bootstrap(document, [angApp]);
+          });
+        }
+      }
+
       document.registerElement('cz-form', {
         prototype: formulario
       })
