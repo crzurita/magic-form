@@ -99,6 +99,9 @@
       }
       return palabra2.replace(/\s.*/, "");
     }
+    function req(nombre){
+
+    }
     (function(){
       var formulario = Object.create(HTMLElement.prototype)
       var estilos = document.currentScript.ownerDocument.querySelector('template').content;
@@ -125,6 +128,10 @@
             if (attrVal.length>1){
               attrVal.forEach(function(nombre){
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
+              if (nombre.match(/\/.*/)){
+                elem.setAttribute('required', true);
+                nombre = nombre.replace(/\/.*/, "")
+              }
               elem.setAttribute('placeholder', nombre);
               elem.setAttribute('type', typear(parsear(nombre.toLowerCase())))
               if(elem.getAttribute('type') == 'date'){
@@ -141,6 +148,10 @@
               })
             }else{
               elem = document.createElement(attrNom.match(/-[a-z]*/)[0].slice(1));
+              if (attrVal[0].match(/\/.*/)){
+                elem.setAttribute('required', true);
+                attrVal[0] = attrVal[0].replace(/\/.*/, "")
+              }
               elem.setAttribute('placeholder', attrVal[0]);
               elem.setAttribute('type', typear(parsear(attrVal[0].toLowerCase())))
               if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', parsear(attrVal[0].toLowerCase()))}
