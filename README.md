@@ -12,6 +12,13 @@ Esto es simplemente una beta, le faltan muchas cosas de las cuales tengo conocim
 
 
 1) Crear formulario:
+Antes que nada, como se trata de un web component, es necesario que en tu head pongas esta linea:
+```
+<link rel="import" href="components/component-formulario.html"> 
+```
+NOTA: Como se trata de un import, hará una llamada http get, por tanto es necesario que se use sobre un servidor como apache o cualquier otro, suelen usar comunmente XAMPP que instala apache, mysql etc.
+
+Tag para el formulario:
 =======
 ```
 <cz-form></cz-form>
