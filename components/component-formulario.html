@@ -109,6 +109,7 @@
       var act = false;
       formulario.createdCallback = function(){
         var f = document.createElement('form');
+        f.setAttribute('name', 'cz-form');
         estilos.appendChild(f)
         plantilla = document.importNode(estilos, true);
         var atributos = this.attributes;
