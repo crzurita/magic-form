@@ -1,3 +1,19 @@
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Gist
+ @clochi
+ Unwatch 1
+  Star 0
+  Fork 0 clochi/magic-form
+ Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs  Settings
+Tree: 27ea5d697a Find file Copy pathmagic-form/components/component-formulario.html
+27ea5d6  a day ago
+@clochi clochi Se añadio el name cz-form al formulario
+1 contributor
+RawBlameHistory     232 lines (219 sloc)  7.55 KB
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -46,13 +62,11 @@
       .file{
         border: none;
       }
-
     </style>
 
   </template>
 
   <script>
-
     function typear(tipo){
       var tipos = [
         ['mail', '@', 'email'],
@@ -85,7 +99,6 @@
         i++
       }
     }
-
     function parsear(palabra){
       var vocales = ['á', 'é', 'í', 'ó', 'ú']
       var cambio = ['a', 'e', 'i', 'o', 'u']
@@ -99,7 +112,6 @@
       }
       return palabra2.replace(/\s.*/, "");
     }
-
     (function(){
       var formulario = Object.create(HTMLElement.prototype)
       var estilos = document.currentScript.ownerDocument.querySelector('template').content;
@@ -107,8 +119,7 @@
       var angApp = "";
       var rutaJs = "";
       var act = false;
-      var angLib = true;
-      /*function buscarLibAng(){
+      function buscarLibAng(){
         var script = document.getElementsByTagName('script')
         var i = 0;
         while(i < script.length){
@@ -117,35 +128,34 @@
           }
           i++;
         }
-      }*/
+      }
       formulario.createdCallback = function(){
         var f = document.createElement('form');
+        f.setAttribute('name', 'cz-form');
         estilos.appendChild(f)
         plantilla = document.importNode(estilos, true);
         var atributos = this.attributes;
-        angApp = this.getAttribute('ang-app')
-
+        angApp = this.getAttribute('ang-app');
         if (angApp != null){
-          var html = document.getElementsByTagName('html')[0];
-          if (html.attributes.getNamedItem('ng-app')){
-            html.attributes.removeNamedItem('ng-app')
-          }
-          var i = 0;
-          while (i < html.children.length){
-            if (html.children[i].attributes.getNamedItem('ng-app')){
-              html.children[i].attributes.removeNamedItem('ng-app')
-              break;
-            }
-            i++;
-          }
-        }
-        rutaJs = this.getAttribute('rutaJs')
+	          var html = document.getElementsByTagName('html')[0];
+	          if (html.attributes.getNamedItem('ng-app')){
+	            html.attributes.removeNamedItem('ng-app')
+	          }
+	          var i = 0;
+	          while (i < html.children.length){
+	            if (html.children[i].attributes.getNamedItem('ng-app')){
+	              html.children[i].attributes.removeNamedItem('ng-app')
+	              break;
+	            }
+	            i++;
+	          }
+	        }
+        rutaJs = this.getAttribute('rutaJs');
         var objeto = "";
-
         if (atributos.getNamedItem('action')){
           act = true;
         }
-        var i = 0
+        var i = 0;
         while (i<atributos.length){
           if (atributos[i].nodeName == 'scope'){
             objeto = atributos[i].nodeValue
@@ -153,7 +163,6 @@
           }
           i++;
         }
-
         i = 0;
         while (i < atributos.length){
           if (atributos[i].nodeName.search('data') != -1){
@@ -171,7 +180,6 @@
               if(elem.getAttribute('type') == 'date'){
                 var tmpFecha = elem;
                 elem.setAttribute('type', 'text')
-
                 elem.addEventListener('focus', function asdf(){
                   tmpFecha.setAttribute('type', 'date');
                   this.removeEventListener('focus', asdf)
@@ -222,30 +230,24 @@
           }
         i++;
         }
-
-        angApp != null ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
+        act ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
       }
-
       formulario.attachedCallback = function(){
-        /*if (angApp != null){
-            scri = document.createElement('script');
-            scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
-            document.body.appendChild(scri)
-            scri.addEventListener('load', cargarAng)
-            function cargarAng(){
-              if (rutaJs != null){
-                var ruta = document.createElement('script');
-                ruta.src = rutaJs;
-                document.body.appendChild(ruta);
-              }*/
-              document.addEventListener('DOMContentLoaded', function readyDom(){
-                  angular.bootstrap(document, [angApp]);
-              })
-
-            /*}
-        }*/
+        if (angApp != null){
+          scri = document.createElement('script');
+          scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
+          document.body.appendChild(scri)
+          scri.addEventListener('load', cargarAng)
+          function cargarAng(){
+            var ruta = document.createElement('script');
+            ruta.src = rutaJs;
+            document.body.appendChild(ruta);
+            angular.element(document).ready(function() {
+              angular.bootstrap(document, [angApp]);
+            });
+          }
+        }
       }
-
       document.registerElement('cz-form', {
         prototype: formulario
       })
