@@ -107,23 +107,45 @@
       var angApp = "";
       var rutaJs = "";
       var act = false;
+      var angLib = true;
+      /*function buscarLibAng(){
+        var script = document.getElementsByTagName('script')
+        var i = 0;
+        while(i < script.length){
+          if (script[i].attributes.src.value.match(/angular.*.js\b/) != null){
+            return false;
+          }
+          i++;
+        }
+      }*/
       formulario.createdCallback = function(){
         var f = document.createElement('form');
         estilos.appendChild(f)
         plantilla = document.importNode(estilos, true);
         var atributos = this.attributes;
         angApp = this.getAttribute('ang-app')
-        rutaJs = this.getAttribute('rutaJs')
-        var i = 0;
-        var objeto = "";
-        while (i<atributos.length){
-          if (atributos[i].nodeName == 'action'){
-            act = true
-            break;
+
+        if (angApp != null){
+          var html = document.getElementsByTagName('html')[0];
+          if (html.attributes.getNamedItem('ng-app')){
+            html.attributes.removeNamedItem('ng-app')
           }
-          i++;
+          var i = 0;
+          while (i < html.children.length){
+            if (html.children[i].attributes.getNamedItem('ng-app')){
+              html.children[i].attributes.removeNamedItem('ng-app')
+              break;
+            }
+            i++;
+          }
         }
-        i = 0
+        rutaJs = this.getAttribute('rutaJs')
+        var objeto = "";
+
+        if (atributos.getNamedItem('action')){
+          act = true;
+        }
+        var i = 0
         while (i<atributos.length){
           if (atributos[i].nodeName == 'scope'){
             objeto = atributos[i].nodeValue
@@ -155,7 +177,7 @@
                   this.removeEventListener('focus', asdf)
                 })
               }
-              if (act){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(nombre.toLowerCase()))}
+              if (angApp == null){elem.setAttribute('name', parsear(nombre.toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(nombre.toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
               })
             }else{
@@ -166,7 +188,7 @@
               }
               elem.setAttribute('placeholder', attrVal[0]);
               elem.setAttribute('type', typear(parsear(attrVal[0].toLowerCase())))
-              if (act){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(attrVal[0].toLowerCase()))}
+              if (angApp == null){elem.setAttribute('name', parsear(attrVal[0].toLowerCase()))}else{elem.setAttribute('ng-model', "scope."+objeto+"."+parsear(attrVal[0].toLowerCase()))}
               plantilla.querySelector('form').appendChild(elem);
             }
           }else{
@@ -201,24 +223,27 @@
         i++;
         }
 
-        act ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
+        angApp != null ? this.createShadowRoot().appendChild(plantilla) : this.appendChild(plantilla);
       }
 
       formulario.attachedCallback = function(){
-        if (act == false){
-          scri = document.createElement('script');
-          scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
-          document.body.appendChild(scri)
-          scri.addEventListener('load', cargarAng)
-          function cargarAng(){
-            var ruta = document.createElement('script');
-            ruta.src = rutaJs;
-            document.body.appendChild(ruta);
-            angular.element(document).ready(function() {
-              angular.bootstrap(document, [angApp]);
-            });
-          }
-        }
+        /*if (angApp != null){
+            scri = document.createElement('script');
+            scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js";
+            document.body.appendChild(scri)
+            scri.addEventListener('load', cargarAng)
+            function cargarAng(){
+              if (rutaJs != null){
+                var ruta = document.createElement('script');
+                ruta.src = rutaJs;
+                document.body.appendChild(ruta);
+              }*/
+              document.addEventListener('DOMContentLoaded', function readyDom(){
+                  angular.bootstrap(document, [angApp]);
+              })
+
+            /*}
+        }*/
       }
 
       document.registerElement('cz-form', {
