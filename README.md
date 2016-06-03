@@ -54,8 +54,9 @@ NOTA: Los unicos atributos que van con la forma ```data-input=' "" '``` son los 
 
 USO PARA ANGULAR
 =======
-IMPORTANTE: Si trabaja con Angularjs, no debe colocar el atributo action ```action="procesador.php"```.
-También debemos quitar la linea ```ng-app=""``` y quitar el ```<script src="el cdn de angularjs"</script>``` ya que el componente trae el cdn de la ultima versión de Angular 1.5.x e inicia angular una vez que cargó el componente.
+IMPORTANTE: Si trabaja con Angularjs, no debe colocar el atributo action ```action="procesador.php"``` ya que va a procesar directamente con ajax, para eso se utiliza ```scope="tuScope"```
+Con respecto a tu ```ng-app="tuApp"``` y a tu cdn de angular, puedes quitarlo o dejarlo, ya que el componente se encargará de removerlo automaticamente.
+JQUERY, no incluyas JQUERY ya que iniciará el modulo de tu app y dará error.
 
 1)
 =======
