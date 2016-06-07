@@ -98,7 +98,7 @@
     }
     (function(){
       var formulario = Object.create(HTMLElement.prototype)
-      var estilos = document.currentScript.ownerDocument.querySelector('template').content;
+      var estilos = document._currentScript.ownerDocument.querySelector('template').content;
       var plantilla = "";
       var angApp = "";
       var rutaJs = "";
