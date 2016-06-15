@@ -229,7 +229,7 @@
         if (angApp != null){
 
           if (document.scripts.length > 0){
-            document.addEventListener('DOMContentLoaded', function(){
+            //document.addEventListener('DOMContentLoaded', function(){
               buscarLibAng()
               if (libAng){
                 scri = document.createElement('script');
@@ -240,8 +240,13 @@
                     var ruta = document.createElement('script');
                     ruta.src = rutaJs;
                     document.body.appendChild(ruta);
+                    ruta.addEventListener('load', function(){
+                      angular.bootstrap(document, [angApp]);
+                    })
+                  }else{
+                    angular.bootstrap(document, [angApp]);
                   }
-                  angular.bootstrap(document, [angApp]);
+
                 })
               }else{
                 if (rutaJs != null){
@@ -255,7 +260,7 @@
                   angular.bootstrap(document, [angApp])
                 }
               }
-            })
+            //})
           }else{
             scri = document.createElement('script');
             scri.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js";
